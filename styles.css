@@ -102,11 +102,11 @@ body.light-mode {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
 }
 
 html {
     scroll-behavior: smooth;
-    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 body {
@@ -117,7 +117,6 @@ body {
     background-color: var(--color-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 /* ============================================================================
@@ -329,6 +328,27 @@ code {
     font-family: 'Courier New', monospace;
 }
 
+.social-links {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.social-links a {
+    font-size: var(--font-size-small);
+    color: var(--color-accent);
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--color-accent-hover);
+    border-bottom: 1px solid var(--color-accent-hover);
+}
+
 @media (max-width: 768px) {
     .hero-container {
         flex-direction: column;
@@ -424,8 +444,20 @@ section h2 {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-lg);
+}
+
+@media (max-width: 1024px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .project-tile {
