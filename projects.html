@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Logan Chu's projects — systems, ML, and developer tools.">
+    <title>Projects — Logan Chu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Logan Chu</a>
+            <ul class="nav-links">
+                <li><a href="index.html">About</a></li>
+                <li><a href="projects.html" class="active">Projects</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1>Projects</h1>
+                <p class="page-intro">
+                    A selection of work exploring systems, machine learning, and developer tools.
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="projects-detailed">
+            <div class="container">
+                
+                <div class="project">
+                    <h3>Distributed Key-Value Store</h3>
+                    <p class="problem">Understanding how systems maintain consistency across unreliable networks.</p>
+                    <div class="description">
+                        <p>
+                            Built a fault-tolerant distributed key-value store in Rust supporting RAFT consensus, 
+                            automatic leader election, and network partitions. The system passes all Maelstrom test suites.
+                        </p>
+                        <p>
+                            <strong>Why interesting:</strong> Forced me to reason deeply about ordering guarantees, 
+                            state machines, and the CAP theorem. Learned that consensus is harder than it appears—most bugs 
+                            were in edge cases around leadership transitions.
+                        </p>
+                    </div>
+                    <p class="tech"><strong>Stack:</strong> Rust, Protocol Buffers, async/await</p>
+                    <p class="link"><a href="https://github.com/logantc/raft-kv" target="_blank">→ View on GitHub</a></p>
+                </div>
+
+                <div class="project">
+                    <h3>Neural Network from Scratch</h3>
+                    <p class="problem">Understanding backpropagation and gradient descent at a fundamental level.</p>
+                    <div class="description">
+                        <p>
+                            Implemented a fully-connected neural network in NumPy with automatic differentiation. 
+                            Trained on MNIST, CIFAR-10. Added optimizers (SGD, Adam) and regularization (dropout, batch norm).
+                        </p>
+                        <p>
+                            <strong>Why interesting:</strong> Reimplementing PyTorch taught me that neural nets aren't magic—
+                            they're carefully orchestrated matrix operations. Understanding the chain rule numerically changed 
+                            how I think about optimization.
+                        </p>
+                    </div>
+                    <p class="tech"><strong>Stack:</strong> Python, NumPy</p>
+                    <p class="link"><a href="https://github.com/logantc/neural-net" target="_blank">→ View on GitHub</a></p>
+                </div>
+
+                <div class="project">
+                    <h3>Language Server Protocol Implementation</h3>
+                    <p class="problem">Enabling IDE features (autocomplete, goto-definition) for a custom language.</p>
+                    <div class="description">
+                        <p>
+                            Built a language server for a small Python-like language, supporting semantic analysis, 
+                            type inference, and code navigation. Integrated with VS Code via LSP.
+                        </p>
+                        <p>
+                            <strong>Why interesting:</strong> Bridges software engineering and language design. 
+                            Required implementing a symbol table, scope resolution, and incremental parsing—core ideas in 
+                            compiler design that affect user experience directly.
+                        </p>
+                    </div>
+                    <p class="tech"><strong>Stack:</strong> TypeScript, Language Server Protocol</p>
+                    <p class="link"><a href="https://github.com/logantc/lang-server" target="_blank">→ View on GitHub</a></p>
+                </div>
+
+                <div class="project">
+                    <h3>Memory Allocator</h3>
+                    <p class="problem">Understanding memory layout and the OS/application boundary.</p>
+                    <div class="description">
+                        <p>
+                            Implemented a custom allocator in C supporting First-Fit and Best-Fit strategies with coalescing. 
+                            Achieved fragmentation ratios competitive with jemalloc on synthetic workloads.
+                        </p>
+                        <p>
+                            <strong>Why interesting:</strong> Forces you to think about alignment, fragmentation, and syscall overhead. 
+                            Made real the tradeoff between allocation speed and memory efficiency.
+                        </p>
+                    </div>
+                    <p class="tech"><strong>Stack:</strong> C, systems programming</p>
+                    <p class="link"><a href="https://github.com/logantc/malloc" target="_blank">→ View on GitHub</a></p>
+                </div>
+
+                <div class="project">
+                    <h3>Open Source: Contribution to Tokio</h3>
+                    <p class="problem">Reducing runtime overhead in async Rust applications.</p>
+                    <div class="description">
+                        <p>
+                            Optimized task spawning in the Tokio async runtime. Merged PR reducing allocation overhead 
+                            by ~15% on high-contention workloads.
+                        </p>
+                        <p>
+                            <strong>Why interesting:</strong> Reading production code is humbling. Learning from established 
+                            engineering practices accelerated my understanding of performance profiling and benchmarking.
+                        </p>
+                    </div>
+                    <p class="tech"><strong>Stack:</strong> Rust, async runtime design</p>
+                    <p class="link"><a href="https://github.com/tokio-rs/tokio/pull/5241" target="_blank">→ View on GitHub</a></p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Logan Chu</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

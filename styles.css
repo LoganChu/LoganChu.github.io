@@ -1,11 +1,10 @@
 /* 
- * Minimalist, intellectually serious portfolio
- * Design principles:
- * - Neutral palette (white, off-white, charcoal)
- * - Excellent typography with breathing room
- * - Mobile-first, fully responsive
- * - Subtle, functional animations only
- * - Focus on content clarity over decoration
+ * Professional, research-oriented portfolio
+ * Design inspired by academic/research aesthetic
+ * - Neutral palette with subtle accent
+ * - Clean typography inspired by academic publications
+ * - Multi-page structure for organization
+ * - Professional, understated elegance
  */
 
 /* ============================================================================
@@ -15,24 +14,27 @@
 :root {
     /* Colors */
     --color-white: #ffffff;
-    --color-off-white: #fafaf8;
-    --color-light-gray: #f0ede8;
-    --color-gray: #e0dcd6;
-    --color-medium-gray: #8a8680;
-    --color-dark-gray: #2a2622;
-    --color-accent: #0066cc;
-    --color-accent-hover: #0052a3;
+    --color-off-white: #fafaf9;
+    --color-light-gray: #f5f3f1;
+    --color-gray: #e8e6e1;
+    --color-medium-gray: #9a9590;
+    --color-dark-gray: #1a1a1a;
+    --color-accent: #c44569;
+    --color-accent-light: #e8a5b8;
+    --color-accent-hover: #a83a52;
+    --color-border: #e8e6e1;
 
     /* Typography */
-    --font-family-serif: 'Georgia', 'Garamond', serif;
+    --font-family-serif: 'Georgia', 'Garamond', 'Times New Roman', serif;
     --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
     
     --font-size-base: 16px;
     --font-size-small: 14px;
     --font-size-large: 18px;
     
-    --line-height-base: 1.6;
+    --line-height-base: 1.7;
     --line-height-tight: 1.3;
+    --line-height-relaxed: 1.8;
 
     /* Spacing */
     --spacing-unit: 8px;
@@ -46,7 +48,7 @@
 
     /* Layout */
     --max-width: 900px;
-    --border-radius: 4px;
+    --border-radius: 2px;
     --transition-speed: 0.2s;
 }
 
@@ -79,29 +81,29 @@ body {
    ============================================================================ */
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-sans);
-    font-weight: 600;
+    font-family: var(--font-family-serif);
+    font-weight: 700;
     line-height: var(--line-height-tight);
     margin-top: var(--spacing-lg);
     margin-bottom: var(--spacing-md);
     color: var(--color-dark-gray);
+    letter-spacing: -0.3px;
 }
 
 h1 {
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-sm);
-    letter-spacing: -0.5px;
+    font-size: 2.8rem;
+    margin-bottom: var(--spacing-md);
 }
 
 h2 {
     font-size: 2rem;
     margin-bottom: var(--spacing-lg);
-    letter-spacing: -0.3px;
 }
 
 h3 {
     font-size: 1.3rem;
     margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-md);
 }
 
 h4 {
@@ -113,6 +115,7 @@ h4 {
 p {
     margin-bottom: var(--spacing-md);
     color: var(--color-dark-gray);
+    line-height: var(--line-height-relaxed);
 }
 
 p + p {
@@ -161,7 +164,7 @@ code {
 
 .navbar {
     background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-light-gray);
+    border-bottom: 1px solid var(--color-border);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -175,11 +178,12 @@ code {
 }
 
 .logo {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--color-dark-gray);
-    letter-spacing: 1px;
+    letter-spacing: 0px;
     transition: color var(--transition-speed) ease;
+    font-family: var(--font-family-serif);
 }
 
 .logo:hover {
@@ -189,7 +193,7 @@ code {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-xl);
 }
 
 .nav-links a {
@@ -198,10 +202,13 @@ code {
     transition: color var(--transition-speed) ease;
     text-decoration: none;
     border-bottom: none;
+    font-family: var(--font-family-sans);
+    font-weight: 500;
 }
 
-.nav-links a:hover {
-    color: var(--color-dark-gray);
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--color-accent);
 }
 
 /* Mobile Navigation */
@@ -222,42 +229,73 @@ code {
 .hero {
     padding: var(--spacing-3xl) 0;
     background-color: var(--color-white);
-    text-align: center;
 }
 
-.hero h1 {
-    margin-bottom: var(--spacing-xs);
+.hero .container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--spacing-3xl);
+    align-items: flex-start;
+}
+
+.hero-text h1 {
     font-size: 3rem;
+    margin-bottom: var(--spacing-xs);
 }
 
-.subtitle {
-    font-size: var(--font-size-large);
-    color: var(--color-medium-gray);
+.affiliation {
+    font-size: var(--font-size-small);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: var(--spacing-lg);
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .positioning {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--color-dark-gray);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.7;
+    line-height: var(--line-height-relaxed);
     margin-bottom: 0;
 }
 
+.hero-image {
+    text-align: center;
+}
+
+.placeholder-image {
+    width: 250px;
+    height: 250px;
+    background-color: var(--color-light-gray);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-medium-gray);
+    font-size: var(--font-size-small);
+    font-weight: 500;
+}
+
+.image-caption {
+    font-size: var(--font-size-small);
+    color: var(--color-medium-gray);
+    margin-top: var(--spacing-md);
+}
+
 @media (max-width: 768px) {
-    .hero {
-        padding: var(--spacing-2xl) 0;
+    .hero .container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2xl);
     }
 
-    .hero h1 {
+    .hero-text h1 {
         font-size: 2.2rem;
     }
 
-    .positioning {
-        font-size: 1rem;
+    .placeholder-image {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
     }
 }
 
@@ -267,7 +305,7 @@ code {
 
 section {
     padding: var(--spacing-3xl) 0;
-    border-top: 1px solid var(--color-light-gray);
+    border-top: 1px solid var(--color-border);
 }
 
 section:first-of-type {
@@ -276,6 +314,21 @@ section:first-of-type {
 
 section h2 {
     margin-bottom: var(--spacing-2xl);
+}
+
+/* PAGE HEADER */
+.page-header {
+    padding: var(--spacing-3xl) 0 var(--spacing-2xl);
+}
+
+.page-header h1 {
+    margin-bottom: var(--spacing-md);
+}
+
+.page-intro {
+    font-size: var(--font-size-large);
+    color: var(--color-medium-gray);
+    max-width: 600px;
 }
 
 /* ============================================================================
@@ -296,10 +349,14 @@ section h2 {
    PROJECTS SECTION
    ============================================================================ */
 
+.projects-detailed {
+    /* page-specific styling */
+}
+
 .project {
     margin-bottom: var(--spacing-3xl);
     padding-bottom: var(--spacing-2xl);
-    border-bottom: 1px solid var(--color-light-gray);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .project:last-child {
@@ -311,6 +368,7 @@ section h2 {
 .project h3 {
     margin-bottom: var(--spacing-sm);
     margin-top: 0;
+    font-size: 1.3rem;
 }
 
 .problem {
@@ -322,7 +380,7 @@ section h2 {
 
 .description {
     margin: var(--spacing-md) 0;
-    line-height: 1.8;
+    line-height: var(--line-height-relaxed);
 }
 
 .description p {
@@ -427,37 +485,106 @@ section h2 {
    CONTACT SECTION
    ============================================================================ */
 
-.contact {
-    text-align: center;
+.contact-main {
+    /* page-specific styling */
 }
 
-.contact h2 {
-    margin-bottom: var(--spacing-lg);
+.contact-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-3xl);
 }
 
-.contact > .container > p {
-    color: var(--color-medium-gray);
-    margin-bottom: var(--spacing-xl);
+.contact-option h3 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
 }
 
-.contact-links {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-xl);
+.contact-option p {
+    margin-bottom: 0;
+    font-size: var(--font-size-large);
 }
 
-.contact-link {
+.contact-option a {
     font-weight: 600;
-    color: var(--color-dark-gray);
-    font-size: var(--font-size-small);
-    padding-bottom: 2px;
-    border-bottom: 2px solid var(--color-accent);
 }
 
-.contact-link:hover {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent-hover);
+.contact-bio {
+    padding-top: var(--spacing-2xl);
+    border-top: 1px solid var(--color-border);
+}
+
+.contact-bio h3 {
+    margin-top: 0;
+}
+
+/* ============================================================================
+   NEWS SECTION
+   ============================================================================ */
+
+.news-section {
+    /* page-specific styling */
+}
+
+.news-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
+    padding-bottom: var(--spacing-2xl);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.news-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.news-date {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-small);
+    color: var(--color-medium-gray);
+    font-weight: 500;
+}
+
+.news-date .month {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.news-date .day {
+    font-size: 1.5rem;
+    color: var(--color-dark-gray);
+    font-weight: 700;
+}
+
+.news-date .year {
+    font-size: var(--font-size-small);
+}
+
+.news-content h3 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+}
+
+.news-content p {
+    margin-bottom: 0;
+    color: var(--color-medium-gray);
+}
+
+@media (max-width: 768px) {
+    .news-item {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .news-date {
+        flex-direction: row;
+        gap: var(--spacing-sm);
+    }
 }
 
 /* ============================================================================
@@ -468,7 +595,7 @@ section h2 {
     background-color: var(--color-off-white);
     padding: var(--spacing-2xl) 0;
     text-align: center;
-    border-top: 1px solid var(--color-light-gray);
+    border-top: 1px solid var(--color-border);
     margin-top: var(--spacing-3xl);
 }
 
@@ -504,16 +631,15 @@ section h2 {
     }
 
     .container {
-        padding: 0 var(--spacing-md);
+        padding: 0 var(--spacing-lg);
     }
 
     .skills-grid {
         grid-template-columns: 1fr;
     }
 
-    .contact-links {
-        gap: var(--spacing-lg);
-        flex-direction: column;
+    .nav-links {
+        gap: var(--spacing-md);
     }
 }
 
@@ -545,16 +671,12 @@ section h2 {
         display: block;
     }
 
-    .hero {
-        padding: var(--spacing-2xl) 0;
+    .hero .container {
+        gap: var(--spacing-xl);
     }
 
-    .hero h1 {
-        font-size: 1.8rem;
-    }
-
-    .subtitle {
-        font-size: 1rem;
+    .container {
+        padding: 0 var(--spacing-md);
     }
 }
 

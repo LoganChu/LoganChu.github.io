@@ -3,236 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Computer Science undergraduate portfolio. Building systems and exploring how intelligence emerges from code.">
-    <title>Logan Chu — CS Student</title>
+    <meta name="description" content="Logan Chu — Computer Science undergraduate portfolio.">
+    <title>Logan Chu</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Navigation (minimal) -->
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
-            <a href="#" class="logo">LC</a>
+            <a href="index.html" class="logo">Logan Chu</a>
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#writing">Writing</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="index.html" class="active">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Logan Chu</h1>
-            <p class="subtitle">Computer Science Undergraduate</p>
-            <p class="positioning">
-                Building systems that think clearly. 
-                Interested in compilers, distributed systems, and learning how intelligence emerges from code.
-            </p>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About</h2>
-            <p>
-                I'm a junior studying Computer Science at Duke University. I'm driven by the belief that engineering 
-                is fundamentally about clear thinking—writing systems that are correct, efficient, and understandable.
-            </p>
-            <p>
-                My focus areas include systems programming, machine learning fundamentals, and developer tooling. 
-                I learn by building: I prefer implementing concepts myself over watching tutorials, and I'm most engaged 
-                when working on problems where constraints force interesting tradeoffs.
-            </p>
-            <p>
-                Outside of coursework, I contribute to open-source projects, experiment with novel architectural 
-                patterns, and spend time understanding the theory behind systems I use daily.
-            </p>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2>Projects</h2>
-            
-            <div class="project">
-                <h3>Distributed Key-Value Store</h3>
-                <p class="problem">Problem: Understanding how systems maintain consistency across unreliable networks.</p>
-                <div class="description">
-                    <p>
-                        Built a fault-tolerant distributed key-value store in Rust supporting RAFT consensus, 
-                        automatic leader election, and network partitions. The system passes all Maelstrom test suites.
-                    </p>
-                    <p>
-                        <strong>Why interesting:</strong> Forced me to reason deeply about ordering guarantees, 
-                        state machines, and the CAP theorem. Learned that consensus is harder than it appears—most bugs 
-                        were in edge cases around leadership transitions.
-                    </p>
-                </div>
-                <p class="tech"><strong>Stack:</strong> Rust, Protocol Buffers, async/await</p>
-                <p class="link"><a href="https://github.com/logantc/raft-kv" target="_blank">→ View on GitHub</a></p>
-            </div>
-
-            <div class="project">
-                <h3>Neural Network from Scratch</h3>
-                <p class="problem">Problem: Understanding backpropagation and gradient descent at a fundamental level.</p>
-                <div class="description">
-                    <p>
-                        Implemented a fully-connected neural network in NumPy with automatic differentiation. 
-                        Trained on MNIST, CIFAR-10. Added optimizers (SGD, Adam) and regularization (dropout, batch norm).
-                    </p>
-                    <p>
-                        <strong>Why interesting:</strong> Reimplementing PyTorch taught me that neural nets aren't magic—
-                        they're carefully orchestrated matrix operations. Understanding the chain rule numerically changed 
-                        how I think about optimization.
-                    </p>
-                </div>
-                <p class="tech"><strong>Stack:</strong> Python, NumPy</p>
-                <p class="link"><a href="https://github.com/logantc/neural-net" target="_blank">→ View on GitHub</a></p>
-            </div>
-
-            <div class="project">
-                <h3>Language Server Protocol Implementation</h3>
-                <p class="problem">Problem: Enabling IDE features (autocomplete, goto-definition) for a custom language.</p>
-                <div class="description">
-                    <p>
-                        Built a language server for a small Python-like language, supporting semantic analysis, 
-                        type inference, and code navigation. Integrated with VS Code via LSP.
-                    </p>
-                    <p>
-                        <strong>Why interesting:</strong> Bridges software engineering and language design. 
-                        Required implementing a symbol table, scope resolution, and incremental parsing—core ideas in 
-                        compiler design that affect user experience directly.
-                    </p>
-                </div>
-                <p class="tech"><strong>Stack:</strong> TypeScript, Language Server Protocol</p>
-                <p class="link"><a href="https://github.com/logantc/lang-server" target="_blank">→ View on GitHub</a></p>
-            </div>
-
-            <div class="project">
-                <h3>Memory Allocator</h3>
-                <p class="problem">Problem: Understanding memory layout and the OS/application boundary.</p>
-                <div class="description">
-                    <p>
-                        Implemented a custom allocator in C supporting First-Fit and Best-Fit strategies with coalescing. 
-                        Achieved fragmentation ratios competitive with jemalloc on synthetic workloads.
-                    </p>
-                    <p>
-                        <strong>Why interesting:</strong> Forces you to think about alignment, fragmentation, and syscall overhead. 
-                        Made real the tradeoff between allocation speed and memory efficiency.
-                    </p>
-                </div>
-                <p class="tech"><strong>Stack:</strong> C, systems programming</p>
-                <p class="link"><a href="https://github.com/logantc/malloc" target="_blank">→ View on GitHub</a></p>
-            </div>
-
-            <div class="project">
-                <h3>Open Source: Contribution to Tokio</h3>
-                <p class="problem">Problem: Reducing runtime overhead in async Rust applications.</p>
-                <div class="description">
-                    <p>
-                        Optimized task spawning in the Tokio async runtime. Merged PR reducing allocation overhead 
-                        by ~15% on high-contention workloads.
-                    </p>
-                    <p>
-                        <strong>Why interesting:</strong> Reading production code is humbling. Learning from established 
-                        engineering practices accelerated my understanding of performance profiling and benchmarking.
-                    </p>
-                </div>
-                <p class="tech"><strong>Stack:</strong> Rust, async runtime design</p>
-                <p class="link"><a href="https://github.com/tokio-rs/tokio/pull/5241" target="_blank">→ View on GitHub</a></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2>Skills</h2>
-            
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h4>Languages</h4>
-                    <p>Rust, Python, C, TypeScript, Java</p>
-                </div>
-                
-                <div class="skill-category">
-                    <h4>Systems</h4>
-                    <p>Concurrent programming, async/await, networking, memory management, profiling</p>
-                </div>
-                
-                <div class="skill-category">
-                    <h4>ML / AI</h4>
-                    <p>Backpropagation, optimization algorithms, deep learning fundamentals, NLP basics</p>
-                </div>
-                
-                <div class="skill-category">
-                    <h4>Tools & Platforms</h4>
-                    <p>Git, Linux, Docker, PostgreSQL, gdb, perf, pytest</p>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Logan Chu</h1>
+                        <p class="affiliation">Duke University</p>
+                        <p class="positioning">
+                            Computer Science Undergraduate. Building systems that think clearly. 
+                            Interested in compilers, distributed systems, and how intelligence emerges from code.
+                        </p>
+                    </div>
+                    <div class="hero-image">
+                        <div class="placeholder-image">
+                            <span>Photo</span>
+                        </div>
+                        <p class="image-caption">Durham, NC</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <p class="skills-note">
-                I believe in depth over breadth. These represent areas where I can reason from first principles, 
-                not just follow tutorials.
-            </p>
-        </div>
-    </section>
+        <!-- About Section -->
+        <section class="about">
+            <div class="container">
+                <h2>About</h2>
+                <p>
+                    I'm a junior studying Computer Science at Duke University. I'm driven by the belief that engineering 
+                    is fundamentally about clear thinking—writing systems that are correct, efficient, and understandable.
+                </p>
+                <p>
+                    My focus areas include systems programming, machine learning fundamentals, and developer tooling. 
+                    I learn by building: I prefer implementing concepts myself over watching tutorials, and I'm most engaged 
+                    when working on problems where constraints force interesting tradeoffs.
+                </p>
+                <p>
+                    Outside of coursework, I contribute to open-source projects, experiment with novel architectural 
+                    patterns, and spend time understanding the theory behind systems I use daily.
+                </p>
 
-    <!-- Writing / Thinking Section -->
-    <section id="writing" class="writing">
-        <div class="container">
-            <h2>Writing & Thinking</h2>
-            <p class="section-intro">
-                Short essays and notes exploring ideas that fascinate me.
-            </p>
-            
-            <div class="writing-list">
-                <article class="writing-item">
-                    <h4><a href="blog/raft-consensus.html">Understanding RAFT Consensus</a></h4>
-                    <p>Why consensus is counterintuitive, and what made RAFT click for me.</p>
-                </article>
-                
-                <article class="writing-item">
-                    <h4><a href="blog/backprop.html">Backpropagation: Calculus in Code</a></h4>
-                    <p>How the chain rule turns into gradient computation, and why automatic differentiation is elegant.</p>
-                </article>
-
-                <article class="writing-item">
-                    <h4><a href="blog/rust-performance.html">Performance Debugging in Rust</a></h4>
-                    <p>Using flamegraph and perf to understand where CPU time actually goes.</p>
-                </article>
-
-                <article class="writing-item">
-                    <h4><a href="blog/memory-fragmentation.html">The Hidden Cost of Allocation</a></h4>
-                    <p>Why malloc isn't free and what happens when you build an allocator.</p>
-                </article>
+                <h3 style="margin-top: 3rem;">Skills</h3>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h4>Languages</h4>
+                        <p>Rust, Python, C, TypeScript, Java</p>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4>Systems</h4>
+                        <p>Concurrent programming, async/await, networking, memory management</p>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4>ML / AI</h4>
+                        <p>Backpropagation, optimization, deep learning, NLP basics</p>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h4>Tools</h4>
+                        <p>Git, Linux, Docker, PostgreSQL, gdb, perf, pytest</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Get in Touch</h2>
-            <p>Interested in discussing systems, research, or opportunities—feel free to reach out.</p>
-            
-            <div class="contact-links">
-                <a href="mailto:logan@example.com" class="contact-link">Email</a>
-                <a href="https://github.com/logantc" class="contact-link">GitHub</a>
-                <a href="https://linkedin.com/in/logantc" class="contact-link">LinkedIn</a>
-                <a href="https://scholar.google.com/citations?user=logantc" class="contact-link">Google Scholar</a>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>© 2026 Logan Chu. No frameworks, no bloat.</p>
+            <p>© 2026 Logan Chu</p>
         </div>
     </footer>
 
