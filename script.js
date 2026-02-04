@@ -60,6 +60,20 @@
                 link.classList.remove('active');
             }
         });
+        
+        // Add smooth page transition effect on navigation
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && href !== '#' && !href.startsWith('http')) {
+                    e.preventDefault();
+                    document.documentElement.style.opacity = '0.97';
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 100);
+                }
+            });
+        });
     });
 
     // ========================================================================
