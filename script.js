@@ -23,9 +23,9 @@
     
     function updateMoonIcon() {
         if (document.body.classList.contains('dark-mode')) {
-            moonIcon.textContent = '☀️';
-        } else {
             moonIcon.textContent = '🌙';
+        } else {
+            moonIcon.textContent = '☀️';
         }
     }
     
