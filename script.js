@@ -8,6 +8,42 @@
     'use strict';
 
     // ========================================================================
+    // DARK MODE TOGGLE
+    // ========================================================================
+    
+    const moonIcon = document.querySelector('.moon-icon');
+    
+    // Check for saved mode preference or default to light mode
+    const savedMode = localStorage.getItem('theme-mode');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    const initialMode = savedMode || (prefersDark ? 'dark-mode' : 'light-mode');
+    document.body.classList.add(initialMode);
+    updateMoonIcon();
+    
+    function updateMoonIcon() {
+        if (document.body.classList.contains('dark-mode')) {
+            moonIcon.textContent = '☀️';
+        } else {
+            moonIcon.textContent = '🌙';
+        }
+    }
+    
+    if (moonIcon) {
+        moonIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+            
+            const currentMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : 'light-mode';
+            localStorage.setItem('theme-mode', currentMode);
+            updateMoonIcon();
+        });
+        
+        moonIcon.style.cursor = 'pointer';
+    }
+
+    // ========================================================================
     // ACTIVE NAVIGATION HIGHLIGHTING
     // ========================================================================
     // Highlight the current page in navigation
