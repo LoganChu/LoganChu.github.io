@@ -47,51 +47,9 @@
     --spacing-3xl: calc(var(--spacing-unit) * 10);
 
     /* Layout */
-    --max-width: 900px;
+    --max-width: 1100px;
     --border-radius: 2px;
     --transition-speed: 0.2s;
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-white: #1a1a1a;
-        --color-off-white: #242424;
-        --color-light-gray: #2a2a2a;
-        --color-gray: #3a3a3a;
-        --color-medium-gray: #888888;
-        --color-dark-gray: #ffffff;
-        --color-accent: #e8a5b8;
-        --color-accent-light: #f0c4d4;
-        --color-accent-hover: #f5d4df;
-        --color-border: #3a3a3a;
-    }
-}
-
-body.dark-mode {
-    --color-white: #1a1a1a;
-    --color-off-white: #242424;
-    --color-light-gray: #2a2a2a;
-    --color-gray: #3a3a3a;
-    --color-medium-gray: #888888;
-    --color-dark-gray: #ffffff;
-    --color-accent: #e8a5b8;
-    --color-accent-light: #f0c4d4;
-    --color-accent-hover: #f5d4df;
-    --color-border: #3a3a3a;
-}
-
-body.light-mode {
-    --color-white: #ffffff;
-    --color-off-white: #fafaf9;
-    --color-light-gray: #f5f3f1;
-    --color-gray: #e8e6e1;
-    --color-medium-gray: #9a9590;
-    --color-dark-gray: #1a1a1a;
-    --color-accent: #c44569;
-    --color-accent-light: #e8a5b8;
-    --color-accent-hover: #a83a52;
-    --color-border: #e8e6e1;
 }
 
 /* ============================================================================
@@ -107,7 +65,6 @@ body.light-mode {
 
 html {
     scroll-behavior: smooth;
-    background-color: var(--color-white);
 }
 
 body {
@@ -228,10 +185,11 @@ code {
 
 .nav-title {
     font-family: var(--font-family-serif);
-    font-size: 1rem;
+    font-size: 1.3rem;
     color: var(--color-dark-gray);
     text-decoration: none;
     font-weight: 600;
+    flex: 1;
 }
 
 .nav-links {
@@ -254,11 +212,6 @@ code {
 .nav-links a:hover,
 .nav-links a.active {
     color: var(--color-accent);
-}
-
-.moon-icon {
-    font-size: 1.2rem;
-    cursor: pointer;
 }
 
 /* Mobile Navigation */
@@ -293,7 +246,7 @@ code {
 
 .hero-text h1 {
     font-size: 2.5rem;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0;
     margin-top: 0;
 }
 
@@ -362,9 +315,9 @@ code {
 }
 
 .social-links a img {
-    width: 18px;
-    height: 18px;
-    max-width: 22px;
+    width: 24px;
+    height: 24px;
+    max-width: 28px;
     display: block;
     object-fit: contain;
     vertical-align: middle;
@@ -372,24 +325,6 @@ code {
 
 .social-links a:hover img {
     transform: scale(1.08);
-}
-
-/* Make white GitHub invert for light backgrounds; remove inversion in dark mode */
-.social-github img {
-    filter: invert(1) brightness(0.95);
-}
-
-body.dark-mode .social-github img {
-    filter: none;
-}
-
-/* X logo: use black image on light mode; invert to white in dark mode */
-.social-x img {
-    filter: none;
-}
-
-body.dark-mode .social-x img {
-    filter: invert(1) brightness(1.1);
 }
 
 @media (max-width: 768px) {
@@ -469,7 +404,7 @@ section h2 {
 
 .about p {
     line-height: var(--line-height-relaxed);
-    max-width: 900px;
+    max-width: 1100px;
     color: var(--color-dark-gray);
 }
 
@@ -482,7 +417,8 @@ section h2 {
    ============================================================================ */
 
 .projects-detailed {
-    /* page-specific styling */
+    background: linear-gradient(135deg, rgba(196, 69, 105, 0.04) 0%, rgba(232, 165, 184, 0.04) 100%);
+    padding: var(--spacing-2xl) 0;
 }
 
 .projects-grid {
@@ -510,19 +446,15 @@ section h2 {
     padding: var(--spacing-sm);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: grid;
-    grid-template-columns: 40% 1fr;
-    height: 180px;
+    grid-template-rows: 45% 1fr;
+    height: 400px;
     position: relative;
     overflow: hidden;
 }
 
 .project-tile:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-body.dark-mode .project-tile:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
 }
 
 .project-image {
@@ -553,29 +485,30 @@ body.dark-mode .project-tile:hover {
     position: absolute;
     right: 12px;
     bottom: 12px;
-    background: var(--color-accent);
+    background: transparent;
     color: #fff;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     font-size: 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    transition: transform 0.15s ease, background 0.15s ease;
+    box-shadow: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    opacity: 0.6;
 }
 
 .project-github img {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     display: block;
 }
 
 .project-github:hover {
-    transform: translateY(-3px);
-    background: var(--color-accent-hover);
+    transform: scale(1.2);
+    opacity: 1;
 }
 
 @media (max-width: 768px) {
@@ -604,6 +537,7 @@ body.dark-mode .project-tile:hover {
     margin-top: 0;
     margin-bottom: var(--spacing-xs);
     font-size: 1rem;
+    color: var(--color-accent);
 }
 
 .project-description {
@@ -620,7 +554,7 @@ body.dark-mode .project-tile:hover {
 
 .project-tile .tech {
     font-size: 0.85rem;
-    color: var(--color-medium-gray);
+    color: var(--color-accent);
     margin: var(--spacing-xs) 0;
     margin-bottom: var(--spacing-sm);
 }
