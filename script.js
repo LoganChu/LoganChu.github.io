@@ -52,7 +52,7 @@
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         const navLinks = document.querySelectorAll('.nav-links a');
         const navTitle = document.querySelector('.nav-title');
-        
+
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
             if (href === currentPage || (currentPage === '' && href === 'index.html')) {
@@ -72,20 +72,6 @@
                 navTitle.style.display = 'none';
             }
         }
-
-        // Add smooth page transition effect on navigation by toggling html.fading
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (href && href !== '#' && !href.startsWith('http')) {
-                    e.preventDefault();
-                    document.documentElement.classList.add('fading');
-                    setTimeout(() => {
-                        window.location.href = href;
-                    }, 140);
-                }
-            });
-        });
     });
 
     // ========================================================================
