@@ -73,4 +73,68 @@
         });
     });
 
+    // ========================================================================
+    // CAROUSEL CONTROLS FOR SKILLS
+    // ========================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        const skillCategories = document.querySelectorAll('.skill-category');
+        skillCategories.forEach(cat => {
+            const carousel = cat.querySelector('.skill-carousel');
+            const btnNext = cat.querySelector('.carousel-next');
+            const btnPrev = cat.querySelector('.carousel-prev');
+
+            if (!carousel) return;
+
+            // make arrows scroll by 60% of visible width
+            const step = () => Math.max(carousel.clientWidth * 0.6, 80);
+
+            if (btnNext) btnNext.addEventListener('click', () => {
+                carousel.scrollBy({ left: step(), behavior: 'smooth' });
+            });
+
+            if (btnPrev) btnPrev.addEventListener('click', () => {
+                carousel.scrollBy({ left: -step(), behavior: 'smooth' });
+            });
+
+            // update button states based on scroll position
+            function updateButtons() {
+                if (!btnPrev || !btnNext) return;
+                const atStart = carousel.scrollLeft <= 2;
+                const atEnd = Math.ceil(carousel.scrollLeft + carousel.clientWidth) >= carousel.scrollWidth - 2;
+                if (atStart) {
+                    btnPrev.setAttribute('aria-hidden', 'true');
+                } else {
+                    btnPrev.removeAttribute('aria-hidden');
+                }
+                if (atEnd) {
+                    btnNext.setAttribute('aria-hidden', 'true');
+                } else {
+                    btnNext.removeAttribute('aria-hidden');
+                }
+            }
+
+            // attach listeners
+            carousel.addEventListener('scroll', () => { updateButtons(); });
+            window.addEventListener('resize', () => { updateButtons(); });
+            // initial
+            setTimeout(updateButtons, 50);
+
+            // enable dragging with pointer events for desktop
+            let isDown = false, startX, scrollLeft;
+            carousel.addEventListener('pointerdown', (e) => {
+                isDown = true;
+                carousel.setPointerCapture(e.pointerId);
+                startX = e.clientX;
+                scrollLeft = carousel.scrollLeft;
+            });
+            carousel.addEventListener('pointermove', (e) => {
+                if (!isDown) return;
+                const dx = startX - e.clientX;
+                carousel.scrollLeft = scrollLeft + dx;
+            });
+            carousel.addEventListener('pointerup', (e) => { isDown = false; carousel.releasePointerCapture(e.pointerId); });
+            carousel.addEventListener('pointercancel', () => { isDown = false; });
+        });
+    });
+
 })();
