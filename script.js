@@ -51,6 +51,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         const navLinks = document.querySelectorAll('.nav-links a');
+        const navTitle = document.querySelector('.nav-title');
         
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
@@ -60,17 +61,28 @@
                 link.classList.remove('active');
             }
         });
-        
-        // Add smooth page transition effect on navigation
+
+        // Show name on pages that are not the about page
+        if (navTitle) {
+            if (currentPage !== 'index.html' && currentPage !== '') {
+                navTitle.textContent = 'Logan Chu';
+                navTitle.setAttribute('href', 'index.html');
+                navTitle.style.display = 'inline-block';
+            } else {
+                navTitle.style.display = 'none';
+            }
+        }
+
+        // Add smooth page transition effect on navigation by toggling html.fading
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
                 if (href && href !== '#' && !href.startsWith('http')) {
                     e.preventDefault();
-                    document.documentElement.style.opacity = '0.97';
+                    document.documentElement.classList.add('fading');
                     setTimeout(() => {
                         window.location.href = href;
-                    }, 100);
+                    }, 140);
                 }
             });
         });

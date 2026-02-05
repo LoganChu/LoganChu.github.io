@@ -107,6 +107,11 @@ body.light-mode {
 
 html {
     scroll-behavior: smooth;
+    transition: opacity 0.18s ease;
+}
+
+html.fading {
+    opacity: 0;
 }
 
 body {
@@ -216,8 +221,21 @@ code {
 
 .navbar .container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-title {
+    font-family: var(--font-family-serif);
+    font-size: 1rem;
+    color: var(--color-dark-gray);
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .nav-links {
@@ -447,7 +465,7 @@ section h2 {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
 }
 
@@ -463,6 +481,27 @@ section h2 {
     }
 }
 
+@media (max-width: 768px) {
+    .project-tile {
+        flex-direction: column;
+    }
+
+    .project-image {
+        width: 100%;
+        min-height: 140px;
+    }
+
+    .project-content {
+        padding-left: 0;
+        margin-top: var(--spacing-sm);
+    }
+
+    .project-github {
+        right: 12px;
+        bottom: 12px;
+    }
+}
+
 .project-tile {
     background-color: var(--color-off-white);
     border: 1px solid var(--color-border);
@@ -470,7 +509,10 @@ section h2 {
     padding: var(--spacing-sm);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    position: relative;
 }
 
 .project-tile:hover {
@@ -483,12 +525,12 @@ body.dark-mode .project-tile:hover {
 }
 
 .project-image {
-    width: 100%;
-    height: 90px;
+    width: 40%;
+    min-width: 160px;
     background-color: var(--color-light-gray);
     border-radius: 6px;
     overflow: hidden;
-    margin-bottom: var(--spacing-sm);
+    flex-shrink: 0;
 }
 
 .project-image img {
@@ -496,6 +538,36 @@ body.dark-mode .project-tile:hover {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.project-content {
+    flex: 1 1 auto;
+    padding-left: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.project-github {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    background: var(--color-accent);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.project-github:hover {
+    transform: translateY(-3px);
+    background: var(--color-accent-hover);
 }
 
 .project-tile h3 {

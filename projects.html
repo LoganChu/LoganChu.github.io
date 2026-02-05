@@ -11,6 +11,7 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
+            <div class="nav-left"><a href="index.html" class="nav-title"></a></div>
             <ul class="nav-links">
                 <li><a href="index.html">About</a></li>
                 <li><a href="projects.html" class="active">Projects</a></li>
@@ -25,116 +26,112 @@
         <section class="projects-detailed">
             <div class="container">
                 <div class="projects-grid">
-                    <div class="project-tile">
-                        <div class="project-image">
-                            <img src="images/panda.jpg" alt="PandaCurriculum">
+                        <div class="project-tile">
+                            <div class="project-image">
+                                <img src="images/panda.jpg" alt="PandaCurriculum">
+                            </div>
+                            <div class="project-content">
+                                <h3>PandaCurriculum</h3>
+                                <p class="project-description">Goal-conditioned reinforcement learning system for a 7-DOF Panda robot using Hindsight Experience Replay and curriculum learning.</p>
+                                <p class="tech">RL, MuJoCo, SAC, Curriculum Learning</p>
+                            </div>
+                            <a href="https://github.com/logantc/panda-curriculum" class="project-github" aria-label="PandaCurriculum on GitHub">🐙</a>
                         </div>
-                        <h3>PandaCurriculum</h3>
-                        <p class="project-description">
-                            Goal-conditioned reinforcement learning system for a 7-DOF Panda robot using Hindsight Experience Replay and curriculum learning.
-                        </p>
-                        <p class="project-meta">Oct 2025 – Present</p>
-                        <p class="tech">RL, MuJoCo, SAC, Curriculum Learning</p>
-                        <a href="https://github.com/logantc/panda-curriculum" class="project-link">View on GitHub →</a>
-                    </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/dara.jpg" alt="Dara">
                         </div>
-                        <h3>Dara: Duke AI Research Agent</h3>
-                        <p class="project-description">
-                            Terminal-based LLM agent for the Duke Compute Cluster with production Kubernetes infrastructure and 100% auditable safety-first design.
-                        </p>
-                        <p class="project-meta">Sep 2025 – Present</p>
-                        <p class="tech">LiteLLM, MCP, Kubernetes, Bazel, Ansible, OPA</p>
-                        <a href="https://github.com/logantc/dara" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>Dara: Duke AI Research Agent</h3>
+                            <p class="project-description">Terminal-based LLM agent for the Duke Compute Cluster with production Kubernetes infrastructure and 100% auditable safety-first design.</p>
+                            <p class="tech">LiteLLM, MCP, Kubernetes, Bazel, Ansible, OPA</p>
+                        </div>
+                        <a href="https://github.com/logantc/dara" class="project-github" aria-label="Dara on GitHub">🐙</a>
                     </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/stepdrop.jpg" alt="StepDrop">
                         </div>
-                        <h3>StepDrop</h3>
-                        <p class="project-description">
-                            Stochastic step-skipping scheduler for lightweight diffusion models, reducing inference latency by 30–50% while preserving image quality.
-                        </p>
-                        <p class="project-meta">Aug – Dec 2025</p>
-                        <p class="tech">Diffusion Models, Stochastic Sampling, DDPM, DDIM</p>
-                        <a href="https://github.com/logantc/stepdrop" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>StepDrop</h3>
+                            <p class="project-description">Stochastic step-skipping scheduler for lightweight diffusion models, reducing inference latency by 30–50% while preserving image quality.</p>
+                            <p class="tech">Diffusion Models, Stochastic Sampling, DDPM, DDIM</p>
+                        </div>
+                        <a href="https://github.com/logantc/stepdrop" class="project-github" aria-label="StepDrop on GitHub">🐙</a>
                     </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/abstracter.jpg" alt="Abstracter">
                         </div>
-                        <h3>Abstracter: ArXiv LLM</h3>
-                        <p class="project-description">
-                            Fine-tuned Llama-3-8B with LoRA on ArXiv abstracts for instruction-tuning, deployed with Streamlit UI and quantized models on HuggingFace.
-                        </p>
-                        <p class="project-meta">Apr – Sep 2025</p>
-                        <p class="tech">Llama 3, LoRA, Quantization, Streamlit, HuggingFace</p>
-                        <a href="https://github.com/logantc/abstracter" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>Abstracter: ArXiv LLM</h3>
+                            <p class="project-description">Fine-tuned Llama-3-8B with LoRA on ArXiv abstracts for instruction-tuning, deployed with Streamlit UI and quantized models on HuggingFace.</p>
+                            <p class="tech">Llama 3, LoRA, Quantization, Streamlit, HuggingFace</p>
+                        </div>
+                        <a href="https://github.com/logantc/abstracter" class="project-github" aria-label="Abstracter on GitHub">🐙</a>
                     </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/raft.jpg" alt="Distributed Key-Value Store">
                         </div>
-                        <h3>Distributed Key-Value Store</h3>
-                        <p class="project-description">
-                            Fault-tolerant distributed key-value store in Rust with RAFT consensus, leader election, and network partition handling.
-                        </p>
-                        <p class="tech">Rust, Protocol Buffers, async/await</p>
-                        <a href="https://github.com/logantc/raft-kv" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>Distributed Key-Value Store</h3>
+                            <p class="project-description">Fault-tolerant distributed key-value store in Rust with RAFT consensus, leader election, and network partition handling.</p>
+                            <p class="tech">Rust, Protocol Buffers, async/await</p>
+                        </div>
+                        <a href="https://github.com/logantc/raft-kv" class="project-github" aria-label="Raft KV on GitHub">🐙</a>
                     </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/neural.jpg" alt="Neural Network">
                         </div>
-                        <h3>Neural Network from Scratch</h3>
-                        <p class="project-description">
-                            Fully-connected neural network in NumPy with automatic differentiation, trained on MNIST and CIFAR-10.
-                        </p>
-                        <p class="tech">Python, NumPy</p>
-                        <a href="https://github.com/logantc/neural-net" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>Neural Network from Scratch</h3>
+                            <p class="project-description">Fully-connected neural network in NumPy with automatic differentiation, trained on MNIST and CIFAR-10.</p>
+                            <p class="tech">Python, NumPy</p>
+                        </div>
+                        <a href="https://github.com/logantc/neural-net" class="project-github" aria-label="Neural Net on GitHub">🐙</a>
                     </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/lsp.jpg" alt="Language Server">
                         </div>
-                        <h3>Language Server Protocol</h3>
-                        <p class="project-description">
-                            Language server for a Python-like language with semantic analysis, type inference, and VS Code integration.
-                        </p>
-                        <p class="tech">TypeScript, LSP</p>
-                        <a href="https://github.com/logantc/lang-server" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>Language Server Protocol</h3>
+                            <p class="project-description">Language server for a Python-like language with semantic analysis, type inference, and VS Code integration.</p>
+                            <p class="tech">TypeScript, LSP</p>
+                        </div>
+                        <a href="https://github.com/logantc/lang-server" class="project-github" aria-label="Language Server on GitHub">🐙</a>
                     </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/malloc.jpg" alt="Memory Allocator">
                         </div>
-                        <h3>Memory Allocator</h3>
-                        <p class="project-description">
-                            Custom memory allocator in C with First-Fit and Best-Fit strategies, competitive fragmentation ratios.
-                        </p>
-                        <p class="tech">C, Systems Programming</p>
-                        <a href="https://github.com/logantc/malloc" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>Memory Allocator</h3>
+                            <p class="project-description">Custom memory allocator in C with First-Fit and Best-Fit strategies, competitive fragmentation ratios.</p>
+                            <p class="tech">C, Systems Programming</p>
+                        </div>
+                        <a href="https://github.com/logantc/malloc" class="project-github" aria-label="Memory Allocator on GitHub">🐙</a>
                     </div>
 
                     <div class="project-tile">
                         <div class="project-image">
                             <img src="images/tokio.jpg" alt="Tokio Optimization">
                         </div>
-                        <h3>Tokio Runtime Optimization</h3>
-                        <p class="project-description">
-                            Optimized task spawning in Tokio async runtime, reducing allocation overhead by ~15% on high-contention workloads.
-                        </p>
-                        <p class="tech">Rust, Async Runtime</p>
-                        <a href="https://github.com/tokio-rs/tokio/pull/5241" class="project-link">View on GitHub →</a>
+                        <div class="project-content">
+                            <h3>Tokio Runtime Optimization</h3>
+                            <p class="project-description">Optimized task spawning in Tokio async runtime, reducing allocation overhead by ~15% on high-contention workloads.</p>
+                            <p class="tech">Rust, Async Runtime</p>
+                        </div>
+                        <a href="https://github.com/tokio-rs/tokio/pull/5241" class="project-github" aria-label="Tokio PR on GitHub">🐙</a>
                     </div>
                 </div>
             </div>
