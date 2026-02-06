@@ -172,6 +172,7 @@ code {
     padding: var(--spacing-sm) 0;
 }
 
+
 .navbar .container {
     display: flex;
     justify-content: space-between;
@@ -242,6 +243,8 @@ code {
 
 .hero-text {
     flex: 1;
+    border-left: 6px solid var(--color-accent-light);
+    padding-left: var(--spacing-lg);
 }
 
 .hero-text h1 {
@@ -286,8 +289,8 @@ code {
 }
 
 .profile-image {
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 240px;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -411,6 +414,8 @@ section h2 {
 .about {
     padding: var(--spacing-lg) 0;
     border-top: none;
+    border-left: 6px solid var(--color-accent-light);
+    padding-left: var(--spacing-lg);
 }
 
 .about p {
@@ -437,6 +442,11 @@ section h2 {
     gap: var(--spacing-lg);
 }
 
+/* give project tiles a subtle organizational color on the left edge */
+.project-tile {
+    border-left: 6px solid var(--color-accent-light);
+}
+
 @media (max-width: 1024px) {
     .projects-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -460,6 +470,8 @@ section h2 {
     height: 400px;
     position: relative;
     overflow: hidden;
+    /* left accent integrated with existing border */
+    box-shadow: none;
 }
 
 .project-tile:hover {
@@ -610,6 +622,19 @@ section h2 {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-xl);
     margin-bottom: var(--spacing-lg);
+    justify-items: center;
+}
+
+/* reveal-on-scroll helper: used to smoothly reveal elements when they enter viewport */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.reveal-on-scroll.visible {
+    opacity: 1;
+    transform: none;
 }
 
 .skill-category {
@@ -618,6 +643,8 @@ section h2 {
     border-radius: 0;
     padding: var(--spacing-lg) 0;
     text-align: center;
+    width: 100%;
+    max-width: 600px;
 }
 
 .skill-category h4 {
@@ -629,11 +656,14 @@ section h2 {
 
 .skill-carousel {
     display: flex;
-    gap: var(--spacing-md);
-    overflow-x: auto;
+    gap: var(--spacing-sm);
+    overflow: hidden;
     scroll-behavior: smooth;
     padding: var(--spacing-sm) 0;
     scroll-snap-type: x mandatory;
+    /* Add fade effect on edges */
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
 .skill-carousel::-webkit-scrollbar {
@@ -654,22 +684,22 @@ section h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-sm);
-    min-width: 80px;
+    gap: 4px;
+    flex: 0 0 calc(25% - 12px);
     text-align: center;
     scroll-snap-align: center;
 }
 
 .skill-icon {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    font-size: 2rem;
+    background-color: transparent; /* remove box */
+    border: none; /* remove border */
+    border-radius: 50%;
+    font-size: 1.8rem; /* slightly smaller emoji for circular fit */
 }
 
 /* Carousel controls */
@@ -691,6 +721,16 @@ section h2 {
     cursor: pointer;
     font-size: 1.2rem;
     color: var(--color-medium-gray);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.carousel-wrap:hover .carousel-btn:not([aria-hidden="true"]) {
+    opacity: 1;
+}
+
+.carousel-wrap:hover .carousel-btn[aria-hidden="true"] {
+    opacity: 0.3;
 }
 
 .carousel-btn:active { transform: translateY(1px); }
@@ -705,7 +745,7 @@ section h2 {
     flex: 1 1 auto;
 }
 
-.carousel-btn[aria-hidden="true"] { opacity: 0.35; pointer-events: none; }
+.carousel-btn[aria-hidden="true"] { pointer-events: none; }
 
 .skill-label {
     font-size: 0.75rem;

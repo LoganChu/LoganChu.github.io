@@ -88,29 +88,37 @@
             // make arrows scroll by 60% of visible width
             const step = () => Math.max(carousel.clientWidth * 0.6, 80);
 
+            // Clone items for infinite scroll effect
+            const items = Array.from(carousel.children);
+            const itemsHTML = items.map(item => item.outerHTML).join('');
+            carousel.insertAdjacentHTML('beforeend', itemsHTML);
+
             if (btnNext) btnNext.addEventListener('click', () => {
                 carousel.scrollBy({ left: step(), behavior: 'smooth' });
+                // Check if we need to reset scroll position
+                setTimeout(() => {
+                    if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+                        carousel.scrollTo({ left: carousel.scrollLeft - carousel.scrollWidth / 2, behavior: 'auto' });
+                    }
+                }, 500);
             });
 
             if (btnPrev) btnPrev.addEventListener('click', () => {
                 carousel.scrollBy({ left: -step(), behavior: 'smooth' });
+                // Check if we need to reset scroll position
+                setTimeout(() => {
+                    if (carousel.scrollLeft <= 0) {
+                        carousel.scrollTo({ left: carousel.scrollLeft + carousel.scrollWidth / 2, behavior: 'auto' });
+                    }
+                }, 500);
             });
 
             // update button states based on scroll position
             function updateButtons() {
                 if (!btnPrev || !btnNext) return;
-                const atStart = carousel.scrollLeft <= 2;
-                const atEnd = Math.ceil(carousel.scrollLeft + carousel.clientWidth) >= carousel.scrollWidth - 2;
-                if (atStart) {
-                    btnPrev.setAttribute('aria-hidden', 'true');
-                } else {
-                    btnPrev.removeAttribute('aria-hidden');
-                }
-                if (atEnd) {
-                    btnNext.setAttribute('aria-hidden', 'true');
-                } else {
-                    btnNext.removeAttribute('aria-hidden');
-                }
+                // For infinite carousel, always show both buttons
+                btnPrev.removeAttribute('aria-hidden');
+                btnNext.removeAttribute('aria-hidden');
             }
 
             // attach listeners
@@ -135,6 +143,38 @@
             carousel.addEventListener('pointerup', (e) => { isDown = false; carousel.releasePointerCapture(e.pointerId); });
             carousel.addEventListener('pointercancel', () => { isDown = false; });
         });
+    });
+
+    // Reveal-on-scroll for elements with 'reveal-on-scroll' (e.g., Tools category)
+    document.addEventListener('DOMContentLoaded', function() {
+        const revealEls = document.querySelectorAll('.reveal-on-scroll');
+        if (revealEls.length) {
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && entry.intersectionRatio > 0.15) {
+                            entry.target.classList.add('visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: [0.15] });
+                revealEls.forEach(el => io.observe(el));
+            } else {
+                // fallback: reveal based on viewport check on scroll
+                const onScroll = () => {
+                    revealEls.forEach(el => {
+                        if (el.classList.contains('visible')) return;
+                        const rect = el.getBoundingClientRect();
+                        if (rect.top < window.innerHeight - 120) el.classList.add('visible');
+                    });
+                    if ([...revealEls].every(el => el.classList.contains('visible'))) {
+                        window.removeEventListener('scroll', onScroll);
+                    }
+                };
+                window.addEventListener('scroll', onScroll);
+                setTimeout(onScroll, 200);
+            }
+        }
     });
 
 })();
