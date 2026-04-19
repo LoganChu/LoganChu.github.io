@@ -1,4 +1,6 @@
-/* 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap');
+
+/*
  * Professional, research-oriented portfolio
  * Design inspired by academic/research aesthetic
  * - Neutral palette with subtle accent
@@ -19,14 +21,14 @@
     --color-gray: #e8e6e1;
     --color-medium-gray: #9a9590;
     --color-dark-gray: #1a1a1a;
-    --color-accent: #c44569;
-    --color-accent-light: #e8a5b8;
-    --color-accent-hover: #a83a52;
+    --color-accent: #2563eb;
+    --color-accent-light: #93c5fd;
+    --color-accent-hover: #1d4ed8;
     --color-border: #e8e6e1;
 
     /* Typography */
-    --font-family-serif: 'Georgia', 'Garamond', 'Times New Roman', serif;
-    --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    --font-family-serif: 'Plus Jakarta Sans', 'Georgia', 'Garamond', serif;
+    --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
     
     --font-size-base: 16px;
     --font-size-small: 14px;
@@ -429,6 +431,86 @@ section h2 {
 }
 
 /* ============================================================================
+   EXPERIENCE SECTION
+   ============================================================================ */
+
+.experience {
+    padding: var(--spacing-xl) 0;
+}
+
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.experience-entry {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--spacing-sm);
+    border-left: 3px solid var(--color-accent-light);
+    padding-left: var(--spacing-md);
+}
+
+.experience-org {
+    color: var(--color-accent);
+    font-family: var(--font-family-serif);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.experience-role {
+    font-weight: 600;
+    color: var(--color-dark-gray);
+    font-size: 0.9rem;
+}
+
+.experience-date {
+    color: var(--color-medium-gray);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+    padding-top: 2px;
+}
+
+.experience-bullets {
+    list-style: none;
+    margin-top: var(--spacing-xs);
+    padding: 0;
+}
+
+.experience-bullets li {
+    font-size: 0.875rem;
+    color: var(--color-dark-gray);
+    line-height: 1.6;
+    padding-left: 1.1em;
+    position: relative;
+}
+
+.experience-bullets li::before {
+    content: "·";
+    color: var(--color-accent);
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .experience-entry {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-date {
+        order: -1;
+        font-size: 0.8rem;
+    }
+}
+
+/* ============================================================================
    PROJECTS SECTION
    ============================================================================ */
 
@@ -493,6 +575,10 @@ section h2 {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.project-image-gradient {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #bfdbfe 100%);
 }
 
 .project-content {
