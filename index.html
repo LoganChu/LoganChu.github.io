@@ -253,12 +253,46 @@
       <div class="hwork-viewport" id="workViewport">
         <div class="hwork-track" id="workTrack">
 
+          <article class="wcard" style="--depth:14">
+            <span class="wcard-art gen gen--grid" aria-hidden="true"></span>
+            <span class="wcard-art gen gen--grid gen-lit" aria-hidden="true"></span>
+            <span class="wcard-scrim" aria-hidden="true"></span>
+            <div class="wcard-top">
+              <span class="wcard-idx">01</span>
+              <span class="wcard-date">Aug&nbsp;26</span>
+            </div>
+            <div class="wcard-body">
+              <h3>us-federal-tax &mdash; a tax engine that rereads the law daily</h3>
+              <p>A zero-dependency JS/TS engine for US federal tax — brackets, SE tax, capital gains, the &sect;199A QBI deduction — every figure traced to the IRS release it came from. It runs inside an agent harness that rereads the current year&rsquo;s sources daily instead of transcribing them once, which is how it caught Rev. Proc. 2025-32&rsquo;s reissued correction to a 2026 EITC table cell. The sharper bug: someone with $170k of W-2 wages and a side business shares the Social Security wage base, so their self-employment tax is <b>$1,798</b>, not the $9,161 a naive calculation returns.</p>
+              <div class="tags"><span class="tag">Agents</span><span class="tag">Correctness</span><span class="tag">Tax Code</span></div>
+              <div class="wcard-meta"><span>TypeScript</span><span>GitHub &#8599;</span></div>
+            </div>
+            <a class="card-link" href="https://github.com/LoganChu/Agent_Playground" aria-label="us-federal-tax on GitHub"></a>
+          </article>
+
+          <article class="wcard" style="--depth:20">
+            <span class="wcard-art gen gen--wave" aria-hidden="true"></span>
+            <span class="wcard-art gen gen--wave gen-lit" aria-hidden="true"></span>
+            <span class="wcard-scrim" aria-hidden="true"></span>
+            <div class="wcard-top">
+              <span class="wcard-idx">02</span>
+              <span class="wcard-date">Aug&nbsp;26</span>
+            </div>
+            <div class="wcard-body">
+              <h3>Memory Arena &mdash; what agent memory actually costs</h3>
+              <p>Seven agent-memory backends — BM25, dense vectors, entity and temporal knowledge graphs, agent-authored notes — benchmarked against three control-flow styles (single-shot, a model-driven loop, an explicit LangGraph retrieve/assess cycle) on one fixed task suite, scored on accuracy and on token spend split by read, write, and decide. The harness earns its keep by catching real bugs before they become false conclusions: on a 3B local model, <code>entity_graph</code> scored <b>0.00</b> against BM25&rsquo;s 0.56, not because graphs are worse but because k-hop retrieval matched query terms against fact subjects only, missing every fact stored as an object. Fixed, and locked in with a regression test.</p>
+              <div class="tags"><span class="tag">Agent Memory</span><span class="tag">LangGraph</span><span class="tag">Evals</span></div>
+              <div class="wcard-meta"><span>Python</span><span>GitHub &#8599;</span></div>
+            </div>
+            <a class="card-link" href="https://github.com/LoganChu/Graph-Engineering" aria-label="Memory Arena on GitHub"></a>
+          </article>
+
           <article class="wcard" style="--depth:16">
             <span class="wcard-art gen gen--bars" aria-hidden="true"></span>
             <span class="wcard-art gen gen--bars gen-lit" aria-hidden="true"></span>
             <span class="wcard-scrim" aria-hidden="true"></span>
             <div class="wcard-top">
-              <span class="wcard-idx">01</span>
+              <span class="wcard-idx">03</span>
               <span class="wcard-date">Aug&nbsp;26</span>
             </div>
             <div class="wcard-body">
@@ -275,7 +309,7 @@
             <span class="wcard-art gen gen--wave gen-lit" aria-hidden="true"></span>
             <span class="wcard-scrim" aria-hidden="true"></span>
             <div class="wcard-top">
-              <span class="wcard-idx">02</span>
+              <span class="wcard-idx">04</span>
               <span class="wcard-date">Aug&nbsp;26</span>
             </div>
             <div class="wcard-body">
@@ -292,7 +326,7 @@
             <span class="wcard-art gen gen--rings gen-lit" aria-hidden="true"></span>
             <span class="wcard-scrim" aria-hidden="true"></span>
             <div class="wcard-top">
-              <span class="wcard-idx">03</span>
+              <span class="wcard-idx">05</span>
               <span class="wcard-date">May&nbsp;26</span>
             </div>
             <div class="wcard-body">
@@ -309,7 +343,7 @@
             <span class="wcard-art gen gen--dots gen-lit" aria-hidden="true"></span>
             <span class="wcard-scrim" aria-hidden="true"></span>
             <div class="wcard-top">
-              <span class="wcard-idx">04</span>
+              <span class="wcard-idx">06</span>
               <span class="wcard-date">May&nbsp;26</span>
             </div>
             <div class="wcard-body">
@@ -326,7 +360,7 @@
             <span class="wcard-art gen gen--mesh gen-lit" aria-hidden="true"></span>
             <span class="wcard-scrim" aria-hidden="true"></span>
             <div class="wcard-top">
-              <span class="wcard-idx">05</span>
+              <span class="wcard-idx">07</span>
               <span class="wcard-date">Apr&nbsp;26</span>
             </div>
             <div class="wcard-body">
@@ -343,7 +377,7 @@
             <span class="wcard-art gen gen--grid gen-lit" aria-hidden="true"></span>
             <span class="wcard-scrim" aria-hidden="true"></span>
             <div class="wcard-top">
-              <span class="wcard-idx">06</span>
+              <span class="wcard-idx">08</span>
               <span class="wcard-date">Apr&nbsp;26</span>
             </div>
             <div class="wcard-body">
@@ -360,7 +394,7 @@
             <span class="wcard-art gen gen--scan gen-lit" aria-hidden="true"></span>
             <span class="wcard-scrim" aria-hidden="true"></span>
             <div class="wcard-top">
-              <span class="wcard-idx">07</span>
+              <span class="wcard-idx">09</span>
               <span class="wcard-date">Apr&nbsp;26</span>
             </div>
             <div class="wcard-body">
@@ -372,30 +406,13 @@
             <a class="card-link" href="https://github.com/LoganChu/Diffusion-Transformers" aria-label="OptiWorld-FM on GitHub"></a>
           </article>
 
-          <article class="wcard" style="--depth:12">
-            <span class="wcard-art gen gen--dots" aria-hidden="true"></span>
-            <span class="wcard-art gen gen--dots gen-lit" aria-hidden="true"></span>
-            <span class="wcard-scrim" aria-hidden="true"></span>
-            <div class="wcard-top">
-              <span class="wcard-idx">08</span>
-              <span class="wcard-date">Feb&nbsp;26</span>
-            </div>
-            <div class="wcard-body">
-              <h3>CardVault</h3>
-              <p>A full-stack collectible-card platform: ML-powered scanning that detects and classifies cards from multi-card images, inventory and valuation tracking, and a marketplace with two-way trade matching. Split across a TypeScript frontend, backend, and Python ML service.</p>
-              <div class="tags"><span class="tag">Full-Stack</span><span class="tag">TypeScript</span><span class="tag">ML Service</span></div>
-              <div class="wcard-meta"><span>TypeScript</span><span>GitHub &#8599;</span></div>
-            </div>
-            <a class="card-link" href="https://github.com/LoganChu/SLAB" aria-label="CardVault on GitHub"></a>
-          </article>
-
         </div>
       </div>
 
       <div class="hwork-rail" id="workRail">
         <span class="count" id="workCount">01</span>
         <span class="bar"></span>
-        <span class="count">08</span>
+        <span class="count">09</span>
       </div>
     </div>
   </section>
