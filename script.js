@@ -1,42 +1,45 @@
 /*
  * Logan Chu — portfolio interactions
  *
- * One rAF loop drives every effect. Scroll handlers only record scrollY;
- * all reads/writes happen inside the frame so we never thrash layout.
+ * Deliberately small. One rAF loop owns everything that reads scroll
+ * position, so nothing thrashes layout.
  *
- * Effects, in order of appearance:
- *   1. Hero collapse   — FLIP the hero title into the navbar as you scroll
- *   2. Cursor reveal   — a colour disc tracks the pointer over art + portrait
- *   3. Horizontal pan  — vertical scroll pans the work track, cards drift
- *   4. Column slider   — four vertical marquees, alternating direction
+ *   1. Theme toggle       — persisted, resolved pre-paint in index.html
+ *   2. External links     — open off-site links in a new tab
+ *   3. Reveal on scroll   — one IntersectionObserver, fires once per element
+ *   4. Nav state          — hairline on scroll, current section underlined
+ *   5. Work count         — keeps the section total honest as cards change
+ *   6. Falling keys       — a piano roll raining down behind the page
+ *   7. Paging             — one screen per gesture, glided rather than snapped
+ *   8. Back to top        — taken as a jump shot
  */
 
 (function () {
     'use strict';
 
-    // ------------------------------------------------------------------ utils
-
-    var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
-    var lerp = function (a, b, t) { return a + (b - a) * t; };
-    var $ = function (s, r) { return (r || document).querySelector(s); };
+    var $  = function (s, r) { return (r || document).querySelector(s); };
     var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
     var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var FINE = matchMedia('(pointer: fine)').matches;
-    var HOVERS = matchMedia('(hover: hover)').matches;
 
-    if (REDUCED) document.body.classList.add('reduced');
-    if (!HOVERS) document.body.classList.add('no-hover');
-
-    // Modules registered here are ticked once per frame.
+    // Modules registered here are ticked at most once per frame, and only on
+    // frames where something they care about actually moved — so an idle page
+    // does no layout reads at all.
     var frameTasks = [];
+    var dirty = true;
     var onFrame = function (fn) { frameTasks.push(fn); };
+    var invalidate = function () { dirty = true; };
 
-    // ------------------------------------------------------------------ theme
+    addEventListener('scroll', invalidate, { passive: true });
+    addEventListener('resize', invalidate, { passive: true });
+    addEventListener('load', invalidate);
+
+    // --------------------------------------------------------------- 1. theme
 
     (function theme() {
         var btn = $('#themeToggle');
         if (!btn) return;
+
         btn.addEventListener('click', function () {
             var next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
             document.documentElement.dataset.theme = next;
@@ -44,7 +47,7 @@
         });
     }());
 
-    // ------------------------------------------------- external links + nav state
+    // ------------------------------------------------------- 2. external links
 
     (function links() {
         $$('a[href^="http"]').forEach(function (a) {
@@ -54,404 +57,349 @@
         });
     }());
 
-    // -------------------------------------------------------------- reveal-on-scroll
+    // ---------------------------------------------------- 3. reveal on scroll
 
     (function reveal() {
         var els = $$('[data-reveal]');
         if (!els.length) return;
+
         if (REDUCED || !('IntersectionObserver' in window)) {
             els.forEach(function (el) { el.classList.add('in'); });
             return;
         }
+
         var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) {
                 if (!e.isIntersecting) return;
                 e.target.classList.add('in');
                 io.unobserve(e.target);
             });
-        }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+
         els.forEach(function (el) { io.observe(el); });
     }());
 
-    // -------------------------------------------------------------- custom cursor
+    // ------------------------------------------------------------- 4. nav state
 
-    (function cursor() {
-        if (!FINE || REDUCED) return;
-        var ring = $('.cursor-ring');
-        var dot = $('.cursor-dot');
-        if (!ring || !dot) return;
+    (function nav() {
+        var bar = $('#nav');
+        if (!bar) return;
 
-        var tx = innerWidth / 2, ty = innerHeight / 2;
-        var rx = tx, ry = ty;
-        var live = false;
+        var links = $$('.nav-links a[href^="#"]');
+        var targets = links
+            .map(function (a) {
+                return { link: a, el: document.getElementById(a.getAttribute('href').slice(1)) };
+            })
+            .filter(function (t) { return t.el; });
 
-        addEventListener('pointermove', function (e) {
-            tx = e.clientX; ty = e.clientY;
-            if (!live) {
-                live = true;
-                rx = tx; ry = ty;
-                document.body.classList.add('cursor-live');
-            }
-        }, { passive: true });
-
-        addEventListener('pointerdown', function () { document.body.classList.add('cursor-hot'); });
-        addEventListener('pointerup', function () { document.body.classList.remove('cursor-hot'); });
-
-        // Grow the ring over anything clickable.
-        var HOT = 'a, button, .wcard, .chip';
-        addEventListener('pointerover', function (e) {
-            if (e.target.closest && e.target.closest(HOT)) document.body.classList.add('cursor-hot');
-        }, { passive: true });
-        addEventListener('pointerout', function (e) {
-            if (e.target.closest && e.target.closest(HOT)) document.body.classList.remove('cursor-hot');
-        }, { passive: true });
-
-        onFrame(function () {
-            if (!live) return;
-            rx = lerp(rx, tx, 0.18);
-            ry = lerp(ry, ty, 0.18);
-            ring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0)';
-            dot.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
-        });
-    }());
-
-    // ------------------------------------------------- nav state + scroll progress
-
-    (function progress() {
-        var nav = $('#nav');
-        var bar = $('#progress');
         var stuck = false;
+        var current = null;
 
         onFrame(function () {
             var y = scrollY;
-            var isStuck = y > 10;
-            if (nav && isStuck !== stuck) {
-                stuck = isStuck;
-                nav.classList.toggle('is-stuck', stuck);
-            }
-            if (bar) {
-                var max = document.documentElement.scrollHeight - innerHeight;
-                bar.style.setProperty('--p', max > 0 ? (y / max).toFixed(4) : 0);
-            }
-        });
-    }());
 
-    // ================================================================== 1. HERO
-
-    (function hero() {
-        var section = $('#hero');
-        var title = $('#heroTitle');
-        var brand = $('#navBrand');
-        var stage = section && $('.hero-stage', section);
-        if (!section || !title || !brand || !stage) return;
-
-        // --- split the title so each glyph can rise in on load ---------------
-        if (!REDUCED) {
-            var text = title.textContent;
-            var html = '';
-            for (var i = 0; i < text.length; i++) {
-                // A literal space inside an inline-block collapses to zero
-                // width, which would break the FLIP measurement; use nbsp.
-                var ch = text[i] === ' ' ? ' ' : text[i];
-                html += '<span class="char" style="animation-delay:' + (i * 42 + 120) + 'ms">' + ch + '</span>';
-            }
-            title.innerHTML = html;
-        }
-
-        if (REDUCED) {
-            brand.style.opacity = 1;
-            brand.style.pointerEvents = 'auto';
-            return;
-        }
-
-        brand.style.transition = 'none';
-
-        // --- FLIP measurement: hero title -> nav brand -----------------------
-        var flip = { dx: 0, dy: 0, s: 1 };
-
-        function measure() {
-            title.style.transform = 'none';
-            var a = title.getBoundingClientRect();
-            var b = brand.getBoundingClientRect();
-            var fa = parseFloat(getComputedStyle(title).fontSize) || 1;
-            var fb = parseFloat(getComputedStyle(brand).fontSize) || 1;
-            flip.s = fb / fa;
-            flip.dx = b.left - a.left;
-            flip.dy = b.top - a.top;
-            // measure() clears the transform, so force the next frame to
-            // rewrite it even if the scroll position has not changed.
-            lastP = -1;
-        }
-
-        measure();
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-        addEventListener('resize', measure);
-
-        // --- pointer spotlight over the dot grid -----------------------------
-        var spot = { x: 50, y: 50, r: 0, tx: 50, ty: 50, tr: 0 };
-        // Portrait colour disc is driven by the same pointer, in portrait space.
-        var portrait = $('#portrait');
-        var pr = { x: 50, y: 50, r: 0, tx: 50, ty: 50, tr: 0 };
-
-        if (HOVERS) {
-            stage.addEventListener('pointermove', function (e) {
-                var r = stage.getBoundingClientRect();
-                spot.tx = ((e.clientX - r.left) / r.width) * 100;
-                spot.ty = ((e.clientY - r.top) / r.height) * 100;
-                spot.tr = 300;
-
-                if (portrait) {
-                    var q = portrait.getBoundingClientRect();
-                    pr.tx = ((e.clientX - q.left) / q.width) * 100;
-                    pr.ty = ((e.clientY - q.top) / q.height) * 100;
-                    pr.tr = 155;
-                }
-            }, { passive: true });
-
-            stage.addEventListener('pointerleave', function () {
-                spot.tr = 0;
-                pr.tr = 0;
-            });
-        } else if (portrait) {
-            // No hover: skip the reveal entirely rather than leave it grey.
-            var col = $('.layer-color', portrait);
-            if (col) { col.style.webkitMaskImage = 'none'; col.style.maskImage = 'none'; }
-        }
-
-        var lastP = -1;
-
-        onFrame(function () {
-            var rect = section.getBoundingClientRect();
-            var total = section.offsetHeight - innerHeight;
-            var p = total > 0 ? clamp(-rect.top / total, 0, 1) : 0;
-
-            if (p !== lastP) {
-                lastP = p;
-                section.style.setProperty('--hp', p.toFixed(4));
-
-                var s = 1 + (flip.s - 1) * p;
-                title.style.transform =
-                    'translate3d(' + (flip.dx * p).toFixed(2) + 'px,' +
-                    (flip.dy * p).toFixed(2) + 'px,0) scale(' + s.toFixed(4) + ')';
-
-                // Hand off from the hero title to the real nav brand at the end.
-                var hand = clamp((p - 0.88) / 0.12, 0, 1);
-                title.style.opacity = 1 - hand;
-                brand.style.opacity = hand;
-                brand.style.pointerEvents = hand > 0.5 ? 'auto' : 'none';
+            var want = y > 8;
+            if (want !== stuck) {
+                stuck = want;
+                bar.classList.toggle('is-stuck', stuck);
             }
 
-            // Spotlight + portrait reveal lerps (run every frame for smoothness).
-            spot.x = lerp(spot.x, spot.tx, 0.12);
-            spot.y = lerp(spot.y, spot.ty, 0.12);
-            spot.r = lerp(spot.r, spot.tr, 0.09);
-            stage.style.setProperty('--mx', spot.x.toFixed(2) + '%');
-            stage.style.setProperty('--my', spot.y.toFixed(2) + '%');
-            stage.style.setProperty('--spot', spot.r.toFixed(1) + 'px');
+            // Probe a third of the way down rather than right under the navbar,
+            // so the highlight follows what you are actually reading.
+            var mark = y + Math.min(innerHeight * 0.35, 280);
+            var found = null;
+            for (var i = 0; i < targets.length; i++) {
+                var box = targets[i].el.getBoundingClientRect();
+                var top = box.top + y;
+                if (mark >= top && mark < top + box.height) found = targets[i].link;
+            }
 
-            if (portrait && HOVERS) {
-                pr.x = lerp(pr.x, pr.tx, 0.16);
-                pr.y = lerp(pr.y, pr.ty, 0.16);
-                pr.r = lerp(pr.r, pr.tr, 0.11);
-                portrait.style.setProperty('--rx', pr.x.toFixed(2) + '%');
-                portrait.style.setProperty('--ry', pr.y.toFixed(2) + '%');
-                portrait.style.setProperty('--rr', pr.r.toFixed(1) + 'px');
+            // At the very bottom the probe can still sit above the last
+            // section, so the footer would highlight the wrong link.
+            var max = document.documentElement.scrollHeight - innerHeight;
+            if (max > 0 && y >= max - 2 && targets.length) {
+                found = targets[targets.length - 1].link;
+            }
+
+            if (found !== current) {
+                if (current) current.classList.remove('is-here');
+                if (found) found.classList.add('is-here');
+                current = found;
             }
         });
     }());
 
-    // ========================================== 2. ACTIVE WORK (horizontal pan)
+    // ----------------------------------------------------------- 5. work count
+    // The section total is written into the HTML so it is right without JS, but
+    // the weekly routine only has to add or remove a .wcard — this keeps the
+    // number in step either way.
 
-    (function activeWork() {
-        var section = $('#work');
-        if (!section || REDUCED) return;
-
-        var track = $('#workTrack');
-        var viewport = $('#workViewport');
-        var ghost = $('#workGhost');
+    (function workCount() {
         var rail = $('#workRail');
-        var counter = $('#workCount');
-        var cards = $$('.wcard', track);
-        if (!track || !viewport || !cards.length) return;
+        var track = $('#workTrack');
+        if (!rail || !track) return;
 
-        var enabled = false;
-        var dist = 0;
-        var shown = -1;
+        var out = $('.count', rail);
+        var n = $$('.wcard', track).length;
+        if (out && n) out.textContent = n < 10 ? '0' + n : String(n);
+    }());
 
-        function layout() {
-            enabled = innerWidth > 900;
-            if (!enabled) {
-                section.style.height = '';
-                track.style.setProperty('--tx', '0px');
-                if (ghost) ghost.style.setProperty('--gx', '0px');
-                return;
-            }
-            // Cards never resize, so this is measured once and stays true.
-            dist = Math.max(0, track.scrollWidth - viewport.clientWidth);
-            // 1:1 — one pixel of scroll is one pixel of pan. The track can
-            // therefore never outrun the scroll or snap to the end.
-            section.style.height = (innerHeight + dist) + 'px';
+    // -------------------------------------------------------- 6. falling keys
+    // A piano roll behind the page. Lanes follow the chromatic pattern, so the
+    // accidentals land where a keyboard would put them; notes are drawn onto
+    // three planes that fall at different rates, and each plane's pattern
+    // repeats every CYCLE px, so translating by (scroll x rate) mod CYCLE
+    // rains keys down the page and rejoins itself without a seam.
+
+    (function keyfall() {
+        var layer = $('#keyfall');
+        if (!layer) return;
+
+        var CYCLE = 760;               // px of pattern before it repeats
+        var LANE  = 46;                // lane pitch, px
+        var BLACK = [1, 3, 6, 8, 10];  // the accidentals in a chromatic octave
+        var PLANES = [
+            { cls: 'is-far',  rate: 0.06 },
+            { cls: 'is-mid',  rate: 0.13 },
+            { cls: 'is-near', rate: 0.22 }
+        ];
+
+        var planes = [];
+        var lastW = -1, lastH = -1;
+
+        // Deterministic, so a resize rebuilds the same sky rather than a new one.
+        function rand(seed) {
+            var x = Math.sin(seed * 12.9898) * 43758.5453;
+            return x - Math.floor(x);
         }
 
-        layout();
-        addEventListener('resize', layout);
-        addEventListener('load', layout);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+        function build(w, h) {
+            layer.textContent = '';
+            planes = [];
 
-        // Pointer state per card for the colour reveal. Purely visual — it
-        // never touches layout, so it cannot feed back into the pan.
-        var reveals = [];
-        if (HOVERS) {
-            cards.forEach(function (card) {
-                var st = { el: card, x: 50, y: 50, r: 0, tx: 50, ty: 50, tr: 0, on: false };
-                card.addEventListener('pointermove', function (e) {
-                    var r = card.getBoundingClientRect();
-                    st.tx = ((e.clientX - r.left) / r.width) * 100;
-                    st.ty = ((e.clientY - r.top) / r.height) * 100;
-                    st.tr = 190;
-                    st.on = true;
-                }, { passive: true });
-                card.addEventListener('pointerleave', function () { st.tr = 0; });
-                reveals.push(st);
-            });
+            var lanes = Math.ceil(w / LANE) + 1;
+            var reps = Math.ceil((h + CYCLE) / CYCLE) + 1;
+
+            for (var p = 0; p < PLANES.length; p++) {
+                var plane = document.createElement('div');
+                plane.className = 'kf-plane ' + PLANES[p].cls;
+                plane.style.top = (-CYCLE) + 'px';
+                plane.style.height = (reps * CYCLE) + 'px';
+
+                for (var i = 0; i < lanes; i++) {
+                    var seed = p * 131 + i * 7 + 1;
+                    if (rand(seed) > 0.26) continue;   // not every lane sounds
+
+                    var black = BLACK.indexOf(i % 12) !== -1;
+                    var nw = black ? LANE - 22 : LANE - 12;
+                    var left = i * LANE + (LANE - nw) / 2;
+                    var top = rand(seed + 1) * (CYCLE - 170);
+                    var tall = 44 + rand(seed + 2) * 130;
+
+                    // Drawn once per repeat, so the loop has no visible seam.
+                    for (var r = 0; r < reps; r++) {
+                        var note = document.createElement('span');
+                        note.className = black ? 'kf-note is-black' : 'kf-note';
+                        note.style.cssText =
+                            'left:' + left.toFixed(1) + 'px;' +
+                            'width:' + nw + 'px;' +
+                            'top:' + (top + r * CYCLE).toFixed(1) + 'px;' +
+                            'height:' + tall.toFixed(0) + 'px';
+                        plane.appendChild(note);
+                    }
+                }
+
+                layer.appendChild(plane);
+                planes.push({ el: plane, rate: PLANES[p].rate });
+            }
         }
 
         onFrame(function () {
-            if (!enabled) return;
+            var w = layer.clientWidth;
+            var h = layer.clientHeight;
+            if (w !== lastW || h !== lastH) { build(w, h); lastW = w; lastH = h; }
 
-            var rect = section.getBoundingClientRect();
-            if (rect.bottom < 0 || rect.top > innerHeight) return;
+            // Under reduced motion the keys are simply there, and hold still.
+            if (REDUCED) return;
 
-            var total = section.offsetHeight - innerHeight;
-            var p = total > 0 ? clamp(-rect.top / total, 0, 1) : 0;
-
-            track.style.setProperty('--tx', (-dist * p).toFixed(2) + 'px');
-            if (ghost) ghost.style.setProperty('--gx', (-dist * p * 0.35).toFixed(2) + 'px');
-            if (rail) rail.style.setProperty('--wp', p.toFixed(4));
-
-            // Depth: each card drifts a little against the track as it
-            // crosses, so the row separates into layers instead of sliding
-            // as one rigid block.
-            for (var i = 0; i < cards.length; i++) {
-                var card = cards[i];
-                var r = card.getBoundingClientRect();
-                if (r.right < -240 || r.left > innerWidth + 240) continue;
-                var t = (r.left + r.width / 2) / innerWidth;   // 1 -> 0 moving left
-                var depth = parseFloat(card.style.getPropertyValue('--depth')) || 14;
-                card.style.setProperty('--ox', ((t - 0.5) * depth).toFixed(1) + 'px');
-            }
-
-            // Which card is nearest the middle of the viewport, for the counter.
-            if (counter) {
-                var best = 0, bestD = Infinity;
-                for (var k = 0; k < cards.length; k++) {
-                    var cr = cards[k].getBoundingClientRect();
-                    var d = Math.abs((cr.left + cr.width / 2) - innerWidth / 2);
-                    if (d < bestD) { bestD = d; best = k; }
-                }
-                if (best !== shown) {
-                    shown = best;
-                    counter.textContent = ('0' + (best + 1)).slice(-2);
-                }
-            }
-
-            for (var j = 0; j < reveals.length; j++) {
-                var st = reveals[j];
-                if (!st.on) continue;
-                st.x = lerp(st.x, st.tx, 0.2);
-                st.y = lerp(st.y, st.ty, 0.2);
-                st.r = lerp(st.r, st.tr, 0.14);
-                if (st.tr === 0 && st.r < 0.6) { st.r = 0; st.on = false; }
-                st.el.style.setProperty('--rx', st.x.toFixed(2) + '%');
-                st.el.style.setProperty('--ry', st.y.toFixed(2) + '%');
-                st.el.style.setProperty('--rr', st.r.toFixed(1) + 'px');
+            for (var i = 0; i < planes.length; i++) {
+                planes[i].el.style.transform = 'translate3d(0,' +
+                    ((scrollY * planes[i].rate) % CYCLE).toFixed(1) + 'px,0)';
             }
         });
     }());
 
-    // ================================================== 3. COLUMN SLIDER (skills)
+    // ------------------------------------------------------------- 7. paging
+    // Above 900px the page moves a screen at a time. The browser's own snap
+    // lands in a single frame, which reads as a jump, so this takes the wheel
+    // and glides instead: one gesture, one screen, eased over GLIDE ms, with
+    // snapping switched off for the duration so it cannot tug against the
+    // animation. A section taller than its screen scrolls through itself
+    // first, so nothing is ever out of reach.
 
-    (function columnSlider() {
-        var wrap = $('#columns');
-        if (!wrap || REDUCED) return;
+    (function paging() {
+        if (REDUCED) return;
 
-        var cols = [];
-        var built = false;
+        var pages = $$('main > section');
+        var foot = $('.footer');
+        if (foot) pages.push(foot);        // so the tail stays reachable
+        if (pages.length < 2) return;
 
-        // The loop period is the measured height of one un-cloned column. That
-        // measurement is only valid once webfonts have swapped in — measuring
-        // at parse time yields a short period and a visible seam in the loop.
-        function build() {
-            if (built) return;
-            var gap = parseFloat(getComputedStyle(wrap).gap) || 12;
+        var wide = matchMedia('(min-width: 901px)');
+        var NAV = 74;      // the snap offset the stylesheet uses
+        var GLIDE = 900;   // ms to cross one screen
+        var REST = 140;    // ms of quiet after, to swallow trackpad inertia
 
-            cols = $$('.col', wrap).map(function (col) {
-                var inner = $('.col-inner', col);
-                var period = inner.getBoundingClientRect().height + gap;
-                if (period < 2) return null;
+        var root = document.documentElement;
+        var busy = false;
+        var idle = 0;
 
-                // Clone until the strip covers the frame at any offset. The
-                // spare copy absorbs the taller frame used at <900px.
-                var copies = Math.max(2, Math.ceil((col.clientHeight + period) / period) + 2);
-                var seed = inner.innerHTML;
-                for (var i = 1; i < copies; i++) inner.insertAdjacentHTML('beforeend', seed);
-
-                return {
-                    inner: inner,
-                    period: period,
-                    speed: parseFloat(col.dataset.speed) || 20,   // px per second
-                    dir: parseFloat(col.dataset.dir) || -1,
-                    y: 0
-                };
-            }).filter(Boolean);
-
-            built = cols.length > 0;
+        function ease(t) {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         }
 
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
-        else build();
-        setTimeout(build, 1200);   // fallback if fonts.ready never settles
-
-        // Hover slows the whole block to a crawl so labels are readable.
-        var hoverT = 1, hover = 1;
-        wrap.addEventListener('pointerenter', function () { hoverT = 0.12; });
-        wrap.addEventListener('pointerleave', function () { hoverT = 1; });
-
-        // Scroll velocity gives the columns a momentary shove.
-        var lastY = scrollY, boost = 0, last = 0;
-
-        onFrame(function (now) {
-            if (!built) return;
-
-            var dt = last ? Math.min((now - last) / 1000, 0.05) : 0.016;
-            last = now;
-
-            var dv = Math.abs(scrollY - lastY);
-            lastY = scrollY;
-            boost = boost * 0.90 + Math.min(dv, 70) * 0.018;
-            hover = lerp(hover, hoverT, 0.08);
-
-            var mul = (1 + boost) * hover;
-
-            for (var i = 0; i < cols.length; i++) {
-                var c = cols[i];
-                c.y += c.dir * c.speed * mul * dt;
-                while (c.y <= -c.period) c.y += c.period;
-                while (c.y > 0) c.y -= c.period;
-                c.inner.style.setProperty('--y', c.y.toFixed(2) + 'px');
+        // Whichever page sits nearest the top is the one we are on, so anchor
+        // links and the back-to-top shot stay in step with no bookkeeping.
+        function current() {
+            var best = 0, near = Infinity;
+            for (var i = 0; i < pages.length; i++) {
+                var d = Math.abs(pages[i].getBoundingClientRect().top - NAV);
+                if (d < near) { near = d; best = i; }
             }
+            return best;
+        }
+
+        function glideTo(i) {
+            if (i < 0 || i >= pages.length) return;
+
+            var from = scrollY;
+            var max = document.documentElement.scrollHeight - innerHeight;
+            var to = Math.max(0, Math.min(max,
+                pages[i].getBoundingClientRect().top + scrollY - NAV));
+            if (Math.abs(to - from) < 2) return;
+
+            busy = true;
+            root.style.scrollSnapType = 'none';
+            var t0 = performance.now();
+
+            requestAnimationFrame(function step(now) {
+                var t = Math.min(1, (now - t0) / GLIDE);
+                scrollTo({ top: from + (to - from) * ease(t), behavior: 'instant' });
+
+                if (t < 1) { requestAnimationFrame(step); return; }
+                root.style.scrollSnapType = '';
+                idle = performance.now() + REST;
+                busy = false;
+            });
+        }
+
+        addEventListener('wheel', function (e) {
+            if (!wide.matches || e.ctrlKey) return;   // a pinch-zoom is not a page turn
+
+            var dir = e.deltaY > 0 ? 1 : (e.deltaY < 0 ? -1 : 0);
+            if (!dir) return;
+
+            // An overlong section reads through itself before the page turns.
+            var sec = pages[current()];
+            if (sec.scrollHeight > sec.clientHeight + 1) {
+                var atTop = sec.scrollTop <= 0;
+                var atEnd = sec.scrollTop + sec.clientHeight >= sec.scrollHeight - 1;
+                if ((dir > 0 && !atEnd) || (dir < 0 && !atTop)) return;
+            }
+
+            e.preventDefault();
+            if (busy || performance.now() < idle) return;
+            glideTo(current() + dir);
+        }, { passive: false });
+    }());
+
+    // ----------------------------------------- 8. back to top, taken as a shot
+    // The hoop appears only in the back half of the page. Clicking it takes the
+    // shot, and the page follows the ball up.
+
+    (function hoop() {
+        var btn = $('#hoop');
+        if (!btn) return;
+
+        var ballEl = $('.hoop-ball', btn);
+        var shown = false;
+        var firing = false;
+        var scrolled = false;
+
+        onFrame(function () {
+            var max = document.documentElement.scrollHeight - innerHeight;
+            var want = max > 0 && scrollY / max > 0.55;
+            if (want !== shown) {
+                shown = want;
+                btn.classList.toggle('is-in', shown);
+            }
+        });
+
+        function toTop() {
+            scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' });
+        }
+
+        // Quadratic through release, apex, and the front of the rim; then a
+        // short straight drop through the net.
+        var P0 = [-54, 90], P1 = [-14, -60], P2 = [32, 14];
+        var THROUGH = 46, UP = 620, DROP = 240;
+
+        btn.addEventListener('click', function () {
+            if (REDUCED || !ballEl) { toTop(); return; }
+            if (firing) return;
+
+            firing = true;
+            scrolled = false;
+            ballEl.style.opacity = '1';
+            var t0 = performance.now();
+
+            requestAnimationFrame(function step(now) {
+                var ms = now - t0;
+
+                if (ms < UP) {
+                    var t = ms / UP;
+                    var u = 1 - t;
+                    var x = u * u * P0[0] + 2 * u * t * P1[0] + t * t * P2[0];
+                    var y = u * u * P0[1] + 2 * u * t * P1[1] + t * t * P2[1];
+                    ballEl.style.transform =
+                        'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) ' +
+                        'rotate(' + (-t * 430).toFixed(1) + 'deg)';
+                    requestAnimationFrame(step);
+                    return;
+                }
+
+                if (ms < UP + DROP) {
+                    var d = (ms - UP) / DROP;
+                    if (d < 0.08) btn.classList.add('swish');
+                    var y2 = P2[1] + (THROUGH - P2[1]) * d;
+                    ballEl.style.transform =
+                        'translate(' + P2[0] + 'px,' + y2.toFixed(1) + 'px) ' +
+                        'rotate(' + (-430 - d * 130).toFixed(1) + 'deg) ' +
+                        'scale(' + (1 - d * 0.3).toFixed(3) + ')';
+                    ballEl.style.opacity = (1 - Math.max(0, d - 0.4) / 0.6).toFixed(3);
+                    // The page leaves as the ball clears the rim.
+                    if (!scrolled && d > 0.3) { scrolled = true; toTop(); }
+                    requestAnimationFrame(step);
+                    return;
+                }
+
+                ballEl.style.opacity = '0';
+                ballEl.style.transform = '';
+                btn.classList.remove('swish');
+                firing = false;
+                if (!scrolled) toTop();
+            });
         });
     }());
 
-    // ------------------------------------------------------------------ the loop
+    // ------------------------------------------------------------ frame loop
 
-    (function loop() {
-        if (!frameTasks.length) return;
-        var run = function (now) {
-            for (var i = 0; i < frameTasks.length; i++) frameTasks[i](now);
-            requestAnimationFrame(run);
-        };
-        requestAnimationFrame(run);
+    (function tick() {
+        if (dirty) {
+            dirty = false;
+            for (var i = 0; i < frameTasks.length; i++) frameTasks[i]();
+        }
+        requestAnimationFrame(tick);
     }());
 
 }());
