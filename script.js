@@ -8,10 +8,9 @@
  *   2. External links     — open off-site links in a new tab
  *   3. Reveal on scroll   — one IntersectionObserver, fires once per element
  *   4. Nav state          — hairline on scroll, current section underlined
- *   5. Work count         — keeps the section total honest as cards change
- *   6. Falling keys       — a piano roll raining down behind the page
- *   7. Paging             — one screen per gesture, glided rather than snapped
- *   8. Back to top        — taken as a jump shot
+ *   5. Falling keys       — a piano roll raining down behind the page
+ *   6. Paging             — one screen per gesture, glided rather than snapped
+ *   7. Back to top        — taken as a jump shot
  */
 
 (function () {
@@ -129,22 +128,7 @@
         });
     }());
 
-    // ----------------------------------------------------------- 5. work count
-    // The section total is written into the HTML so it is right without JS, but
-    // the weekly routine only has to add or remove a .wcard — this keeps the
-    // number in step either way.
-
-    (function workCount() {
-        var rail = $('#workRail');
-        var track = $('#workTrack');
-        if (!rail || !track) return;
-
-        var out = $('.count', rail);
-        var n = $$('.wcard', track).length;
-        if (out && n) out.textContent = n < 10 ? '0' + n : String(n);
-    }());
-
-    // -------------------------------------------------------- 6. falling keys
+    // -------------------------------------------------------- 5. falling keys
     // A piano roll behind the page. Lanes follow the chromatic pattern, so the
     // accidentals land where a keyboard would put them; notes are drawn onto
     // three planes that fall at different rates, and each plane's pattern
@@ -229,7 +213,7 @@
         });
     }());
 
-    // ------------------------------------------------------------- 7. paging
+    // ------------------------------------------------------------- 6. paging
     // Above 900px the page moves a screen at a time. The browser's own snap
     // lands in a single frame, which reads as a jump, so this takes the wheel
     // and glides instead: one gesture, one screen, eased over GLIDE ms, with
@@ -313,7 +297,7 @@
         }, { passive: false });
     }());
 
-    // ----------------------------------------- 8. back to top, taken as a shot
+    // ----------------------------------------- 7. back to top, taken as a shot
     // The hoop appears only in the back half of the page. Clicking it takes the
     // shot, and the page follows the ball up.
 

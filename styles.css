@@ -169,19 +169,6 @@ button {
     background: var(--line);
 }
 
-.eyebrow .count {
-    order: 2;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: .12em;
-    color: var(--ink-2);
-}
-
-.eyebrow .unit {
-    order: 3;
-    margin-left: -8px;
-    color: var(--ink-3);
-}
-
 .sec-title {
     margin-top: 18px;
     max-width: 20ch;
@@ -520,7 +507,11 @@ button {
 
 .wcard {
     position: relative;
-    display: block;
+    /* A column so .wcard-meta can be pinned to the bottom: in the two-up grid
+       the cards in a row stretch to the tallest, and a shorter description
+       would otherwise float its GitHub link above its neighbour's. */
+    display: flex;
+    flex-direction: column;
     padding-block: 22px 24px;
     border-top: 1px solid var(--line);
 }
@@ -563,7 +554,12 @@ button {
 
 .wcard:hover .wcard-idx { color: var(--seal-ink); }
 
-.wcard-body { margin-top: 10px; }
+.wcard-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-top: 10px;
+}
 
 .wcard-body h3 {
     max-width: 32ch;
@@ -632,7 +628,8 @@ button {
     display: flex;
     align-items: center;
     gap: 18px;
-    margin-top: 12px;
+    margin-top: auto;
+    padding-top: 12px;
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: .12em;
